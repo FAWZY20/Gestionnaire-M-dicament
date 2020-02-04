@@ -1,0 +1,454 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="gsbrapports2019Model.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="gsbrapports2019ModelStoreContainer">
+          <EntitySet Name="famille" EntityType="gsbrapports2019Model.Store.famille" store:Type="Tables" Schema="gsbrapports2019" />
+          <EntitySet Name="medecin" EntityType="gsbrapports2019Model.Store.medecin" store:Type="Tables" Schema="gsbrapports2019" />
+          <EntitySet Name="medicament" EntityType="gsbrapports2019Model.Store.medicament" store:Type="Tables" Schema="gsbrapports2019" />
+          <EntitySet Name="offrir" EntityType="gsbrapports2019Model.Store.offrir" store:Type="Tables" Schema="gsbrapports2019" />
+          <EntitySet Name="rapport" EntityType="gsbrapports2019Model.Store.rapport" store:Type="Tables" Schema="gsbrapports2019" />
+          <EntitySet Name="visiteur" EntityType="gsbrapports2019Model.Store.visiteur" store:Type="Tables" Schema="gsbrapports2019" />
+          <AssociationSet Name="medicament_fk" Association="gsbrapports2019Model.Store.medicament_fk">
+            <End Role="famille" EntitySet="famille" />
+            <End Role="medicament" EntitySet="medicament" />
+          </AssociationSet>
+          <AssociationSet Name="offrir_fk1" Association="gsbrapports2019Model.Store.offrir_fk1">
+            <End Role="rapport" EntitySet="rapport" />
+            <End Role="offrir" EntitySet="offrir" />
+          </AssociationSet>
+          <AssociationSet Name="offrir_fk2" Association="gsbrapports2019Model.Store.offrir_fk2">
+            <End Role="medicament" EntitySet="medicament" />
+            <End Role="offrir" EntitySet="offrir" />
+          </AssociationSet>
+          <AssociationSet Name="rapport_fk1" Association="gsbrapports2019Model.Store.rapport_fk1">
+            <End Role="visiteur" EntitySet="visiteur" />
+            <End Role="rapport" EntitySet="rapport" />
+          </AssociationSet>
+          <AssociationSet Name="rapport_fk2" Association="gsbrapports2019Model.Store.rapport_fk2">
+            <End Role="medecin" EntitySet="medecin" />
+            <End Role="rapport" EntitySet="rapport" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="famille">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="libelle" Type="varchar" Nullable="false" MaxLength="80" />
+        </EntityType>
+        <EntityType Name="medecin">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="nom" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="prenom" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="adresse" Type="varchar" Nullable="false" MaxLength="80" />
+          <Property Name="tel" Type="varchar" MaxLength="15" />
+          <Property Name="specialiteComplementaire" Type="varchar" MaxLength="50" />
+          <Property Name="departement" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="medicament">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="nomCommercial" Type="varchar" Nullable="false" MaxLength="80" />
+          <Property Name="idFamille" Type="varchar" Nullable="false" MaxLength="10" />
+          <Property Name="composition" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="effets" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="contreIndications" Type="varchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="offrir">
+          <Key>
+            <PropertyRef Name="idRapport" />
+            <PropertyRef Name="idMedicament" />
+          </Key>
+          <Property Name="idRapport" Type="int" Nullable="false" />
+          <Property Name="idMedicament" Type="varchar" Nullable="false" MaxLength="30" />
+          <Property Name="quantite" Type="int" />
+        </EntityType>
+        <EntityType Name="rapport">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="date" />
+          <Property Name="motif" Type="varchar" MaxLength="100" />
+          <Property Name="bilan" Type="varchar" MaxLength="100" />
+          <Property Name="idVisiteur" Type="char" Nullable="false" MaxLength="4" />
+          <Property Name="idMedecin" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="visiteur">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="char" Nullable="false" MaxLength="4" />
+          <Property Name="nom" Type="char" MaxLength="30" />
+          <Property Name="prenom" Type="char" MaxLength="30" />
+          <Property Name="login" Type="char" MaxLength="20" />
+          <Property Name="mdp" Type="char" MaxLength="20" />
+          <Property Name="adresse" Type="char" MaxLength="30" />
+          <Property Name="cp" Type="char" MaxLength="5" />
+          <Property Name="ville" Type="char" MaxLength="30" />
+          <Property Name="dateEmbauche" Type="date" />
+        </EntityType>
+        <Association Name="medicament_fk">
+          <End Role="famille" Type="gsbrapports2019Model.Store.famille" Multiplicity="1" />
+          <End Role="medicament" Type="gsbrapports2019Model.Store.medicament" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="famille">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="medicament">
+              <PropertyRef Name="idFamille" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="offrir_fk1">
+          <End Role="rapport" Type="gsbrapports2019Model.Store.rapport" Multiplicity="1" />
+          <End Role="offrir" Type="gsbrapports2019Model.Store.offrir" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rapport">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="offrir">
+              <PropertyRef Name="idRapport" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="offrir_fk2">
+          <End Role="medicament" Type="gsbrapports2019Model.Store.medicament" Multiplicity="1" />
+          <End Role="offrir" Type="gsbrapports2019Model.Store.offrir" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medicament">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="offrir">
+              <PropertyRef Name="idMedicament" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rapport_fk1">
+          <End Role="visiteur" Type="gsbrapports2019Model.Store.visiteur" Multiplicity="1" />
+          <End Role="rapport" Type="gsbrapports2019Model.Store.rapport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="visiteur">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rapport">
+              <PropertyRef Name="idVisiteur" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rapport_fk2">
+          <End Role="medecin" Type="gsbrapports2019Model.Store.medecin" Multiplicity="1" />
+          <End Role="rapport" Type="gsbrapports2019Model.Store.rapport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medecin">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rapport">
+              <PropertyRef Name="idMedecin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="gsbrapports2019Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="gsbrapports2019Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="famille" EntityType="gsbrapports2019Model.famille" />
+          <EntitySet Name="medecin" EntityType="gsbrapports2019Model.medecin" />
+          <EntitySet Name="medicament" EntityType="gsbrapports2019Model.medicament" />
+          <EntitySet Name="offrir" EntityType="gsbrapports2019Model.offrir" />
+          <EntitySet Name="rapport" EntityType="gsbrapports2019Model.rapport" />
+          <EntitySet Name="visiteur" EntityType="gsbrapports2019Model.visiteur" />
+          <AssociationSet Name="medicament_fk" Association="gsbrapports2019Model.medicament_fk">
+            <End Role="famille" EntitySet="famille" />
+            <End Role="medicament" EntitySet="medicament" />
+          </AssociationSet>
+          <AssociationSet Name="rapport_fk2" Association="gsbrapports2019Model.rapport_fk2">
+            <End Role="medecin" EntitySet="medecin" />
+            <End Role="rapport" EntitySet="rapport" />
+          </AssociationSet>
+          <AssociationSet Name="offrir_fk2" Association="gsbrapports2019Model.offrir_fk2">
+            <End Role="medicament" EntitySet="medicament" />
+            <End Role="offrir" EntitySet="offrir" />
+          </AssociationSet>
+          <AssociationSet Name="offrir_fk1" Association="gsbrapports2019Model.offrir_fk1">
+            <End Role="rapport" EntitySet="rapport" />
+            <End Role="offrir" EntitySet="offrir" />
+          </AssociationSet>
+          <AssociationSet Name="rapport_fk1" Association="gsbrapports2019Model.rapport_fk1">
+            <End Role="visiteur" EntitySet="visiteur" />
+            <End Role="rapport" EntitySet="rapport" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="famille">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="String" Nullable="false" />
+          <Property Name="libelle" Type="String" Nullable="false" />
+          <NavigationProperty Name="medicament" Relationship="gsbrapports2019Model.medicament_fk" FromRole="famille" ToRole="medicament" />
+        </EntityType>
+        <EntityType Name="medecin">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nom" Type="String" Nullable="false" />
+          <Property Name="prenom" Type="String" Nullable="false" />
+          <Property Name="adresse" Type="String" Nullable="false" />
+          <Property Name="tel" Type="String" />
+          <Property Name="specialiteComplementaire" Type="String" />
+          <Property Name="departement" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="rapport" Relationship="gsbrapports2019Model.rapport_fk2" FromRole="medecin" ToRole="rapport" />
+        </EntityType>
+        <EntityType Name="medicament">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="String" Nullable="false" />
+          <Property Name="nomCommercial" Type="String" Nullable="false" />
+          <Property Name="idFamille" Type="String" Nullable="false" />
+          <Property Name="composition" Type="String" Nullable="false" />
+          <Property Name="effets" Type="String" Nullable="false" />
+          <Property Name="contreIndications" Type="String" Nullable="false" />
+          <NavigationProperty Name="famille" Relationship="gsbrapports2019Model.medicament_fk" FromRole="medicament" ToRole="famille" />
+          <NavigationProperty Name="offrir" Relationship="gsbrapports2019Model.offrir_fk2" FromRole="medicament" ToRole="offrir" />
+        </EntityType>
+        <EntityType Name="offrir">
+          <Key>
+            <PropertyRef Name="idRapport" />
+            <PropertyRef Name="idMedicament" />
+          </Key>
+          <Property Name="idRapport" Type="Int32" Nullable="false" />
+          <Property Name="idMedicament" Type="String" Nullable="false" />
+          <Property Name="quantite" Type="Int32" />
+          <NavigationProperty Name="medicament" Relationship="gsbrapports2019Model.offrir_fk2" FromRole="offrir" ToRole="medicament" />
+          <NavigationProperty Name="rapport" Relationship="gsbrapports2019Model.offrir_fk1" FromRole="offrir" ToRole="rapport" />
+        </EntityType>
+        <EntityType Name="rapport">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="DateTime" />
+          <Property Name="motif" Type="String" />
+          <Property Name="bilan" Type="String" />
+          <Property Name="idVisiteur" Type="String" Nullable="false" />
+          <Property Name="idMedecin" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="medecin" Relationship="gsbrapports2019Model.rapport_fk2" FromRole="rapport" ToRole="medecin" />
+          <NavigationProperty Name="offrir" Relationship="gsbrapports2019Model.offrir_fk1" FromRole="rapport" ToRole="offrir" />
+          <NavigationProperty Name="visiteur" Relationship="gsbrapports2019Model.rapport_fk1" FromRole="rapport" ToRole="visiteur" />
+        </EntityType>
+        <EntityType Name="visiteur">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="String" Nullable="false" />
+          <Property Name="nom" Type="String" />
+          <Property Name="prenom" Type="String" />
+          <Property Name="login" Type="String" />
+          <Property Name="mdp" Type="String" />
+          <Property Name="adresse" Type="String" />
+          <Property Name="cp" Type="String" />
+          <Property Name="ville" Type="String" />
+          <Property Name="dateEmbauche" Type="DateTime" />
+          <NavigationProperty Name="rapport" Relationship="gsbrapports2019Model.rapport_fk1" FromRole="visiteur" ToRole="rapport" />
+        </EntityType>
+        <Association Name="medicament_fk">
+          <End Role="famille" Type="gsbrapports2019Model.famille" Multiplicity="1" />
+          <End Role="medicament" Type="gsbrapports2019Model.medicament" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="famille">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="medicament">
+              <PropertyRef Name="idFamille" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rapport_fk2">
+          <End Role="medecin" Type="gsbrapports2019Model.medecin" Multiplicity="1" />
+          <End Role="rapport" Type="gsbrapports2019Model.rapport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medecin">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rapport">
+              <PropertyRef Name="idMedecin" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="offrir_fk2">
+          <End Role="medicament" Type="gsbrapports2019Model.medicament" Multiplicity="1" />
+          <End Role="offrir" Type="gsbrapports2019Model.offrir" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="medicament">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="offrir">
+              <PropertyRef Name="idMedicament" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="offrir_fk1">
+          <End Role="rapport" Type="gsbrapports2019Model.rapport" Multiplicity="1" />
+          <End Role="offrir" Type="gsbrapports2019Model.offrir" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="rapport">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="offrir">
+              <PropertyRef Name="idRapport" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="rapport_fk1">
+          <End Role="visiteur" Type="gsbrapports2019Model.visiteur" Multiplicity="1" />
+          <End Role="rapport" Type="gsbrapports2019Model.rapport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="visiteur">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rapport">
+              <PropertyRef Name="idVisiteur" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="gsbrapports2019ModelStoreContainer" CdmEntityContainer="gsbrapports2019Entities">
+          <EntitySetMapping Name="famille">
+            <EntityTypeMapping TypeName="gsbrapports2019Model.famille">
+              <MappingFragment StoreEntitySet="famille">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="libelle" ColumnName="libelle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="medecin">
+            <EntityTypeMapping TypeName="gsbrapports2019Model.medecin">
+              <MappingFragment StoreEntitySet="medecin">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nom" ColumnName="nom" />
+                <ScalarProperty Name="prenom" ColumnName="prenom" />
+                <ScalarProperty Name="adresse" ColumnName="adresse" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="specialiteComplementaire" ColumnName="specialiteComplementaire" />
+                <ScalarProperty Name="departement" ColumnName="departement" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="medicament">
+            <EntityTypeMapping TypeName="gsbrapports2019Model.medicament">
+              <MappingFragment StoreEntitySet="medicament">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nomCommercial" ColumnName="nomCommercial" />
+                <ScalarProperty Name="idFamille" ColumnName="idFamille" />
+                <ScalarProperty Name="composition" ColumnName="composition" />
+                <ScalarProperty Name="effets" ColumnName="effets" />
+                <ScalarProperty Name="contreIndications" ColumnName="contreIndications" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="offrir">
+            <EntityTypeMapping TypeName="gsbrapports2019Model.offrir">
+              <MappingFragment StoreEntitySet="offrir">
+                <ScalarProperty Name="idRapport" ColumnName="idRapport" />
+                <ScalarProperty Name="idMedicament" ColumnName="idMedicament" />
+                <ScalarProperty Name="quantite" ColumnName="quantite" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rapport">
+            <EntityTypeMapping TypeName="gsbrapports2019Model.rapport">
+              <MappingFragment StoreEntitySet="rapport">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="motif" ColumnName="motif" />
+                <ScalarProperty Name="bilan" ColumnName="bilan" />
+                <ScalarProperty Name="idVisiteur" ColumnName="idVisiteur" />
+                <ScalarProperty Name="idMedecin" ColumnName="idMedecin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="visiteur">
+            <EntityTypeMapping TypeName="gsbrapports2019Model.visiteur">
+              <MappingFragment StoreEntitySet="visiteur">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nom" ColumnName="nom" />
+                <ScalarProperty Name="prenom" ColumnName="prenom" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="mdp" ColumnName="mdp" />
+                <ScalarProperty Name="adresse" ColumnName="adresse" />
+                <ScalarProperty Name="cp" ColumnName="cp" />
+                <ScalarProperty Name="ville" ColumnName="ville" />
+                <ScalarProperty Name="dateEmbauche" ColumnName="dateEmbauche" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="gsbRapports">
+        <EntityTypeShape EntityType="gsbrapports2019Model.famille" Width="1.5" PointX="0.75" PointY="9.5" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="gsbrapports2019Model.medecin" Width="1.5" PointX="0.75" PointY="1" Height="2.5571907552083326" IsExpanded="true" />
+        <EntityTypeShape EntityType="gsbrapports2019Model.medicament" Width="1.5" PointX="3" PointY="9" Height="2.5571907552083353" IsExpanded="true" />
+        <EntityTypeShape EntityType="gsbrapports2019Model.offrir" Width="1.5" PointX="5.25" PointY="1.375" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="gsbrapports2019Model.rapport" Width="1.5" PointX="3" PointY="1" Height="2.7494921874999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="gsbrapports2019Model.visiteur" Width="1.5" PointX="0.75" PointY="4.875" Height="2.9417936197916674" IsExpanded="true" />
+        <AssociationConnector Association="gsbrapports2019Model.medicament_fk" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="10.297841796875" />
+          <ConnectorPoint PointX="3" PointY="10.297841796875" />
+        </AssociationConnector>
+        <AssociationConnector Association="gsbrapports2019Model.rapport_fk2" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="2.2785953776041663" />
+          <ConnectorPoint PointX="3" PointY="2.2785953776041663" />
+        </AssociationConnector>
+        <AssociationConnector Association="gsbrapports2019Model.offrir_fk2" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="10.278595377604168" />
+          <ConnectorPoint PointX="6" PointY="10.278595377604168" />
+          <ConnectorPoint PointX="6" PointY="3.3552864583333335" />
+        </AssociationConnector>
+        <AssociationConnector Association="gsbrapports2019Model.offrir_fk1" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="2.3651432291666667" />
+          <ConnectorPoint PointX="5.25" PointY="2.3651432291666667" />
+        </AssociationConnector>
+        <AssociationConnector Association="gsbrapports2019Model.rapport_fk1" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="6.3458968098958337" />
+          <ConnectorPoint PointX="3.75" PointY="6.3458968098958337" />
+          <ConnectorPoint PointX="3.75" PointY="3.7494921874999996" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
